@@ -1,6 +1,7 @@
 import { useState } from "react";
 import TrafficMap from "./components/TrafficMap";
 import StatsBar from "./components/StatsBar";
+import CongestionChart from "./components/CongestionChart";
 import "./App.css";
 
 const CITIES = [
@@ -61,6 +62,7 @@ export default function App() {
       <StatsBar city={selectedCity} />
 
       {/* Map */}
+      <CongestionChart city={selectedCity} />
       <div className="map-wrapper">
         <TrafficMap city={selectedCity} mapLayer={mapLayer} />
       </div>
