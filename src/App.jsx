@@ -2,6 +2,7 @@ import { useState } from "react";
 import TrafficMap from "./components/TrafficMap";
 import StatsBar from "./components/StatsBar";
 import CongestionChart from "./components/CongestionChart";
+import SearchBar from "./components/SearchBar";
 import "./App.css";
 
 const CITIES = [
@@ -15,6 +16,7 @@ const CITIES = [
 export default function App() {
   const [selectedCity, setSelectedCity] = useState(CITIES[0]);
   const [mapLayer, setMapLayer] = useState("traffic");
+  const [searchLocation, setSearchLocation] = useState(null);
 
   return (
     <div className="app">
@@ -56,6 +58,7 @@ export default function App() {
             </button>
           </div>
         </div>
+        <SearchBar onLocationSelect={setSearchLocation} />
       </header>
 
       {/* Stats Bar */}
@@ -64,8 +67,7 @@ export default function App() {
       {/* Map */}
       <CongestionChart city={selectedCity} />
       <div className="map-wrapper">
-        <TrafficMap city={selectedCity} mapLayer={mapLayer} />
-      </div>
+<TrafficMap city={selectedCity} mapLayer={mapLayer} searchLocation={searchLocation} />      </div>
 
       {/* Footer */}
       <footer className="footer">
