@@ -272,3 +272,20 @@ body {
   color: #666;
   margin-top: 2px;
 }
+
+/* ── Leaflet Popup override ── */
+.leaflet-popup-content-wrapper {
+  background: #1e2130 !important;
+  border: 1px solid #3a3d4a !important;
+  border-radius: 10px !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5) !important;
+}
+
+.leaflet-popup-tip {
+  background: #1e2130 !important;
+}
+
+.leaflet-popup-content {
+  color: #fff !important;
+  margin: 12px !important;
+}

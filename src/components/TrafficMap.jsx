@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import IncidentMarkers from "./IncidentMarkers";
 
 const TOMTOM_KEY = import.meta.env.VITE_TOMTOM_API_KEY;
 
@@ -52,7 +53,8 @@ export default function TrafficMap({ city, mapLayer, searchLocation }) {
           maxZoom={22}
         />
       )}
-
+      {/* Incident markers */}
+      <IncidentMarkers city={city} />
       {/* Handles city switching + search jumping */}
       <MapUpdater city={city} searchLocation={searchLocation} />
     </MapContainer>
