@@ -45,7 +45,7 @@ export default function IncidentMarkers({ city }) {
       try {
         // Build bounding box around city center
         const { lat, lng } = city;
-        const delta = 0.15;
+        const delta = 0.08;
         const bbox = `${lng - delta},${lat - delta},${lng + delta},${lat + delta}`;
 
         const res = await axios.get(
@@ -63,7 +63,10 @@ export default function IncidentMarkers({ city }) {
         );
 
         const data = res.data.incidents || [];
-        setIncidents(data);
+const filtered = data.filter(inc =>
+  (inc.properties?.magnitudeOfDelay || 1) >= 2
+);
+setIncidents(filtered);
       } catch (err) {
         console.error("Incidents fetch error:", err);
       }

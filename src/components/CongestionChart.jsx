@@ -52,40 +52,52 @@ export default function CongestionChart({ city }) {
   };
 
   const options = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: { display: false },
-      title: {
-        display: true,
-        text: `${city.name} — 24hr Congestion Pattern (blue = current hour)`,
-        color: "#aaa",
-        font: { size: 12 },
-        padding: { bottom: 10 },
-      },
-      tooltip: {
-        callbacks: {
-          label: (ctx) => ` Congestion: ${ctx.raw}%`,
-        },
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: { display: false },
+    title: {
+      display: true,
+      text: `${city.name}  ·  24-hour Congestion Pattern  ·  Blue = current hour`,
+      color: "rgba(255,255,255,0.3)",
+      font: { size: 11, weight: "400" },
+      padding: { bottom: 12 },
+    },
+    tooltip: {
+      backgroundColor: "rgba(13,17,23,0.95)",
+      borderColor: "rgba(255,255,255,0.1)",
+      borderWidth: 1,
+      titleColor: "rgba(255,255,255,0.5)",
+      bodyColor: "#fff",
+      padding: 10,
+      cornerRadius: 10,
+      callbacks: {
+        label: (ctx) => ` Congestion: ${ctx.raw}%`,
       },
     },
-    scales: {
-      x: {
-        ticks: { color: "#666", font: { size: 10 } },
-        grid: { color: "#2a2d3a" },
+  },
+  scales: {
+    x: {
+      ticks: {
+        color: "rgba(255,255,255,0.25)",
+        font: { size: 10 },
       },
-      y: {
-        min: 0,
-        max: 100,
-        ticks: {
-          color: "#666",
-          font: { size: 10 },
-          callback: (val) => `${val}%`,
-        },
-        grid: { color: "#2a2d3a" },
-      },
+      grid: { color: "rgba(255,255,255,0.04)" },
+      border: { color: "rgba(255,255,255,0.06)" },
     },
-  };
+    y: {
+      min: 0,
+      max: 100,
+      ticks: {
+        color: "rgba(255,255,255,0.25)",
+        font: { size: 10 },
+        callback: (val) => `${val}%`,
+      },
+      grid: { color: "rgba(255,255,255,0.04)" },
+      border: { color: "rgba(255,255,255,0.06)" },
+    },
+  },
+};
 
   return (
     <div className="chart-panel">
@@ -99,7 +111,7 @@ export default function CongestionChart({ city }) {
           <span className="legend-dot" style={{ background: "rgba(74,158,255,0.95)" }}></span> Now
         </div>
       </div>
-      <div style={{ height: "180px" }}>
+      <div style={{ height: "160px" }}>
         <Bar data={chartData} options={options} />
       </div>
     </div>

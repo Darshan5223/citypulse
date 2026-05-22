@@ -23,7 +23,15 @@ export default function App() {
       {/* Header */}
       <header className="header">
         <div className="header-left">
-          <div className="logo">🏙️ CityPulse</div>
+          <div className="logo">
+  <span style={{
+    background: "linear-gradient(135deg, #4a9eff, #a78bfa)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    fontWeight: 700,
+    fontSize: "20px"
+  }}>🏙️ CityPulse</span>
+</div>
           <div className="tagline">Live Urban Traffic Dashboard</div>
         </div>
         <div className="header-controls">
