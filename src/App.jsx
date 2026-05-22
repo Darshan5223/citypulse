@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TrafficMap from "./components/TrafficMap";
 import StatsBar from "./components/StatsBar";
 import CongestionChart from "./components/CongestionChart";
@@ -17,6 +17,24 @@ export default function App() {
   const [selectedCity, setSelectedCity] = useState(CITIES[0]);
   const [mapLayer, setMapLayer] = useState("traffic");
   const [searchLocation, setSearchLocation] = useState(null);
+  const [nextRefresh, setNextRefresh] = useState(300);
+
+  // Countdown timer
+  useEffect(() => {
+    const countdown = setInterval(() => {
+      setNextRefresh((prev) => {
+        if (prev <= 1) return 300;
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(countdown);
+  }, []);
+
+  const formatTime = (secs) => {
+    const m = Math.floor(secs / 60);
+    const s = secs % 60;
+    return `${m}:${s.toString().padStart(2, "0")}`;
+  };
 
   return (
     <div className="app">
@@ -24,16 +42,17 @@ export default function App() {
       <header className="header">
         <div className="header-left">
           <div className="logo">
-  <span style={{
-    background: "linear-gradient(135deg, #4a9eff, #a78bfa)",
-    WebkitBackgroundClip: "text",
-    WebkitTextFillColor: "transparent",
-    fontWeight: 700,
-    fontSize: "20px"
-  }}>🏙️ CityPulse</span>
-</div>
+            <span style={{
+              background: "linear-gradient(135deg, #4a9eff, #a78bfa)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              fontWeight: 700,
+              fontSize: "20px"
+            }}>🏙️ CityPulse</span>
+          </div>
           <div className="tagline">Live Urban Traffic Dashboard</div>
         </div>
+
         <div className="header-controls">
           {/* City Selector */}
           <select
@@ -66,16 +85,26 @@ export default function App() {
             </button>
           </div>
         </div>
+
+        {/* Search */}
         <SearchBar onLocationSelect={setSearchLocation} />
+
+        {/* Refresh countdown */}
+        <div className="refresh-badge">
+          🔄 Refreshes in {formatTime(nextRefresh)}
+        </div>
       </header>
 
       {/* Stats Bar */}
       <StatsBar city={selectedCity} />
 
-      {/* Map */}
+      {/* Congestion Chart */}
       <CongestionChart city={selectedCity} />
+
+      {/* Map */}
       <div className="map-wrapper">
-<TrafficMap city={selectedCity} mapLayer={mapLayer} searchLocation={searchLocation} />      </div>
+        <TrafficMap city={selectedCity} mapLayer={mapLayer} searchLocation={searchLocation} />
+      </div>
 
       {/* Footer */}
       <footer className="footer">

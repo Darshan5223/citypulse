@@ -40,39 +40,42 @@ export default function IncidentMarkers({ city }) {
   const [incidents, setIncidents] = useState([]);
   const map = useMap();
 
+  const fetchIncidents = async () => {
+    try {
+      const { lat, lng } = city;
+      const delta = 0.08;
+      const bbox = `${lng - delta},${lat - delta},${lng + delta},${lat + delta}`;
+
+      const res = await axios.get(
+        `https://api.tomtom.com/traffic/services/5/incidentDetails`,
+        {
+          params: {
+            key: TOMTOM_KEY,
+            bbox,
+            fields: "{incidents{type,geometry{coordinates},properties{id,iconCategory,magnitudeOfDelay,events{description,code},startTime,endTime,from,to,length,delay,roadNumbers,timeValidity}}}",
+            language: "en-GB",
+            categoryFilter: "0,1,2,3,4,5,6,7,8,9,10,11,14",
+            timeValidityFilter: "present",
+          },
+        }
+      );
+
+      const data = res.data.incidents || [];
+      const filtered = data.filter(inc =>
+        (inc.properties?.magnitudeOfDelay || 1) >= 2
+      );
+      setIncidents(filtered);
+    } catch (err) {
+      console.error("Incidents fetch error:", err);
+    }
+  };
+
   useEffect(() => {
-    const fetchIncidents = async () => {
-      try {
-        // Build bounding box around city center
-        const { lat, lng } = city;
-        const delta = 0.08;
-        const bbox = `${lng - delta},${lat - delta},${lng + delta},${lat + delta}`;
-
-        const res = await axios.get(
-          `https://api.tomtom.com/traffic/services/5/incidentDetails`,
-          {
-            params: {
-              key: TOMTOM_KEY,
-              bbox,
-              fields: "{incidents{type,geometry{coordinates},properties{id,iconCategory,magnitudeOfDelay,events{description,code},startTime,endTime,from,to,length,delay,roadNumbers,timeValidity}}}",
-              language: "en-GB",
-              categoryFilter: "0,1,2,3,4,5,6,7,8,9,10,11,14",
-              timeValidityFilter: "present",
-            },
-          }
-        );
-
-        const data = res.data.incidents || [];
-const filtered = data.filter(inc =>
-  (inc.properties?.magnitudeOfDelay || 1) >= 2
-);
-setIncidents(filtered);
-      } catch (err) {
-        console.error("Incidents fetch error:", err);
-      }
-    };
-
     fetchIncidents();
+
+    // Auto refresh every 5 minutes
+    const interval = setInterval(fetchIncidents, 5 * 60 * 1000);
+    return () => clearInterval(interval);
   }, [city]);
 
   return (
@@ -81,7 +84,6 @@ setIncidents(filtered);
         const coords = incident.geometry?.coordinates;
         if (!coords) return null;
 
-        // Handle both Point and LineString geometries
         const position =
           incident.geometry.type === "Point"
             ? [coords[1], coords[0]]

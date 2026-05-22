@@ -386,3 +386,16 @@ body {
   flex-shrink: 0;
   letter-spacing: 0.03em;
 }
+
+/* ── Refresh badge ── */
+.refresh-badge {
+  font-size: 11px;
+  color: rgba(255,255,255,0.35);
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  padding: 5px 12px;
+  flex-shrink: 0;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
